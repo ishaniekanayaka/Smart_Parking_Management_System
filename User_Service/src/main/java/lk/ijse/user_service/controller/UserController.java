@@ -1,8 +1,10 @@
 package lk.ijse.user_service.controller;
 
+import jakarta.validation.Valid;
 import lk.ijse.user_service.dto.UserDTO;
 import lk.ijse.user_service.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,12 +17,13 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public UserDTO createUser(@RequestBody UserDTO userDTO) {
-        return userService.saveUser(userDTO);
+    public ResponseEntity<String> createUser(@RequestBody @Valid UserDTO userDTO) {
+        userService.saveUser(userDTO);
+        return ResponseEntity.ok("User saved successfully");
     }
 
     @PutMapping
-    public UserDTO updateUser(@RequestBody UserDTO userDTO) {
+    public UserDTO updateUser(@RequestBody @Valid  UserDTO userDTO) {
         return userService.updateUser(userDTO);
     }
 
