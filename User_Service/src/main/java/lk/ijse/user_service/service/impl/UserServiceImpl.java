@@ -5,98 +5,113 @@ import lk.ijse.user_service.entity.User;
 import lk.ijse.user_service.exception.UserServiceException;
 import lk.ijse.user_service.repository.UserRepo;
 import lk.ijse.user_service.service.UserService;
+import lk.ijse.user_service.util.VarList;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Autowired
     private UserRepo userRepository;
 
-
-    private final ModelMapper mapper = new ModelMapper();
-
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private ModelMapper modelMapper;
 
     @Override
-    public UserDTO saveUser(UserDTO dto) {
-        User user = mapper.map(dto, User.class);
-        user.setPassword(passwordEncoder.encode(dto.getPassword())); // encode here
-        user.setCreatedAt(LocalDateTime.now());
-        user.setActive(true);
-        return mapper.map(userRepository.save(user), UserDTO.class);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPassword(),
+                getAuthority(user)
+        );
+    }
+    private Set<SimpleGrantedAuthority> getAuthority(User user) {
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+        authorities.add(new SimpleGrantedAuthority(user.getRole()));
+        return authorities;
     }
 
-
-    /*@Override
-    public UserDTO updateUser(UserDTO dto) {
-        User user = userRepository.findById(dto.getId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        user.setFirstName(dto.getFirstName());
-        user.setLastName(dto.getLastName());
-        user.setPhoneNumber(dto.getPhoneNumber());
-       *//* user.setPassword(dto.getPassword());*//*
-        user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        user.setUserType(dto.getUserType());
-        return mapper.map(userRepository.save(user), UserDTO.class);
-    }
-*/
     @Override
-    public List<UserDTO> getAllActiveUsers() {
+    public int saveUser(UserDTO userDTO) {
+        if (userRepository.existsByEmail(userDTO.getEmail())) {
+            return VarList.Not_Acceptable;
+        } else {
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+            userDTO.setActive(true);
+            userRepository.save(modelMapper.map(userDTO, User.class));
+            return VarList.Created;
+        }
+    }
+
+    @Override
+    public UserDTO loadUserDetailsByUsername(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        return modelMapper.map(user, UserDTO.class);
+    }
+
+    @Override
+    public List<UserDTO> getAllUsers() {
         return userRepository.findAll().stream()
-                .filter(User::isActive)
-                .map(user -> mapper.map(user, UserDTO.class))
+                .filter(User::getActive) // Optional: only active users
+                .map(user -> modelMapper.map(user, UserDTO.class))
                 .collect(Collectors.toList());
     }
 
-    /*@Override
-    public UserDTO getUserById(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        return mapper.map(user, UserDTO.class);
+    @Override
+    public boolean deactivateUser(Long userId) {
+        Optional<User> userOpt = userRepository.findById(userId);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            user.setActive(false);
+            userRepository.save(user);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
-    public UserDTO getUserByEmail(String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        return mapper.map(user, UserDTO.class);
-    }*/
+    public int updateUser(UserDTO userDTO) {
+        Optional<User> optionalUser = userRepository.findById(userDTO.getId());
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
 
-    @Override
-    public UserDTO updateUser(UserDTO dto) {
-        User user = userRepository.findById(dto.getId())
-                .orElseThrow(() -> new UserServiceException("User not found with ID: " + dto.getId()));
+            // Update fields
+            user.setFirstName(userDTO.getFirstName());
+            user.setLastName(userDTO.getLastName());
+            user.setPhoneNumber(userDTO.getPhoneNumber());
+            user.setRole(userDTO.getRole());
+            user.setActive(userDTO.isActive());
 
-        user.setFirstName(dto.getFirstName());
-        user.setLastName(dto.getLastName());
-        user.setPhoneNumber(dto.getPhoneNumber());
-        user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        user.setUserType(dto.getUserType());
+            // Optional: update password only if changed
+            if (userDTO.getPassword() != null && !userDTO.getPassword().isBlank()) {
+                BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+                user.setPassword(encoder.encode(userDTO.getPassword()));
+            }
 
-        return mapper.map(userRepository.save(user), UserDTO.class);
-    }
-
-    @Override
-    public UserDTO getUserById(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserServiceException("User not found with ID: " + id));
-        return mapper.map(user, UserDTO.class);
-    }
-
-    @Override
-    public UserDTO getUserByEmail(String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserServiceException("User not found with email: " + email));
-        return mapper.map(user, UserDTO.class);
+            userRepository.save(user);
+            return VarList.Updated;
+        } else {
+            return VarList.Not_Found;
+        }
     }
 
 }

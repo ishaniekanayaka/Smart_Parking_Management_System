@@ -1,7 +1,7 @@
 package lk.ijse.user_service.entity;
 
 import jakarta.persistence.*;
-import lk.ijse.user_service.entity.util.UserType;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -48,13 +48,24 @@ public class User {
     @Column
     private String phoneNumber;
 
-    @Enumerated(EnumType.STRING)
-    private UserType userType;
+    private String role;
 
     @Column
     private LocalDateTime createdAt;
 
     @Column
-    private boolean active = true;
+    private Boolean active = true;
+
+    @PrePersist
+    protected void onCreate() {
+
+        if (this.createdAt == null) {
+            this.createdAt = LocalDateTime.now();
+        }
+        if (this.active == null) {
+            this.active = true; // ✅ explicitly set default
+        }
+
+    }
 
 }

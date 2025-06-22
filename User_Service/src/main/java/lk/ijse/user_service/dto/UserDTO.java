@@ -2,8 +2,6 @@ package lk.ijse.user_service.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import lk.ijse.user_service.entity.util.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,16 +12,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 public class UserDTO {
-
-    /*private Long id;
-    private String email;
-    private String password;
-    private String firstName;
-    private String lastName;
-    private String phoneNumber;
-    private UserType userType;
-    private LocalDateTime createdAt;
-    private boolean active;*/
 
     private Long id;
 
@@ -42,8 +30,7 @@ public class UserDTO {
 
     private String phoneNumber;
 
-    @NotNull(message = "User type is required")
-    private UserType userType;
+    private String role;
 
     private LocalDateTime createdAt;
     private boolean active;
