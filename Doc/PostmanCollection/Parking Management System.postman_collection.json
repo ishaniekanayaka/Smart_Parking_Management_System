@@ -1,0 +1,347 @@
+{
+	"info": {
+		"_postman_id": "adbe350b-f637-4a07-9b5f-d9b7f0d6f7f3",
+		"name": "Parking Management System",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "40383290"
+	},
+	"item": [
+		{
+			"name": "User-Service",
+			"item": [
+				{
+					"name": "signUp",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"aKII\",\r\n  \"lastName\": \"Ekanayake\",\r\n  \"phoneNumber\": \"0767888979\",\r\n  \"role\": \"ADMIN\",\r\n  \"email\": \"admin1@gmail.com\",\r\n  \"password\": \"2002\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8082/user-service/api/Login/auth/signUp"
+					},
+					"response": []
+				},
+				{
+					"name": "signIn",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \r\n  \"email\": \"admin@gmail.com\",\r\n  \"password\": \"2002\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/user-service/api/Login/auth/signIn"
+					},
+					"response": []
+				},
+				{
+					"name": "search id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/user-service/api/Login/auth/2"
+					},
+					"response": []
+				},
+				{
+					"name": "getAll",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE role",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJuYW1lIjoiYUtJSSIsInVzZXJJZCI6MiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE3NTA4MzkwOTEsImV4cCI6MTc1MDkyNTQ5MX0.8l7tJlIp8Fw6Hu-gOwmLdplm2gOxEVc3qC8vr7GqLgo"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"role\":\"DRIVER\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/user-service/api/v1/user/updateRole/1"
+					},
+					"response": []
+				},
+				{
+					"name": "delete user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJuYW1lIjoiYUtJSSIsInVzZXJJZCI6MiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE3NTA4NDA2MTYsImV4cCI6MTc1MDkyNzAxNn0.ieZSmDr1pcXpnwDSQNeLJAPoTagbv717N1ClLdBSN3A"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:8080/user-service/api/v1/user/delete/3"
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Vehicle-service",
+			"item": [
+				{
+					"name": "register vehicle",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiVVNFUiIsIm5hbWUiOiJhS0lJIiwidXNlcklkIjo0LCJlbWFpbCI6InVzZXJAZ21haWwuY29tIiwic3ViIjoidXNlckBnbWFpbC5jb20iLCJpYXQiOjE3NTA4NDg5NjAsImV4cCI6MTc1MDkzNTM2MH0.7UFxZo5pA2pn-7q9gaVX4PthTi1wTfw-EZviU2TrW3w"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"plateNumber\": \"ABC-1265\",\r\n  \"brand\": \"Nissan\",\r\n  \"color\": \"Blue\",\r\n  \"type\": \"Car\",\r\n  \"userId\": 4\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/vehicle-service/api/v1/vehicle/save"
+					},
+					"response": []
+				},
+				{
+					"name": "getAll",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "parking",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiVVNFUiIsIm5hbWUiOiJhS0lJIiwidXNlcklkIjo0LCJlbWFpbCI6InVzZXJAZ21haWwuY29tIiwic3ViIjoidXNlckBnbWFpbC5jb20iLCJpYXQiOjE3NTA4NDg5NjAsImV4cCI6MTc1MDkzNTM2MH0.7UFxZo5pA2pn-7q9gaVX4PthTi1wTfw-EZviU2TrW3w"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"url": "http://localhost:8080/vehicle-service/api/v1/vehicle/isParking/1"
+					},
+					"response": []
+				},
+				{
+					"name": "exit",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiVVNFUiIsIm5hbWUiOiJhS0lJIiwidXNlcklkIjo0LCJlbWFpbCI6InVzZXJAZ21haWwuY29tIiwic3ViIjoidXNlckBnbWFpbC5jb20iLCJpYXQiOjE3NTA4NDg5NjAsImV4cCI6MTc1MDkzNTM2MH0.7UFxZo5pA2pn-7q9gaVX4PthTi1wTfw-EZviU2TrW3w"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"url": "http://localhost:8080/vehicle-service/api/v1/vehicle/isNotParking/1"
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiVVNFUiIsIm5hbWUiOiJhS0lJIiwidXNlcklkIjo0LCJlbWFpbCI6InVzZXJAZ21haWwuY29tIiwic3ViIjoidXNlckBnbWFpbC5jb20iLCJpYXQiOjE3NTA4NDg5NjAsImV4cCI6MTc1MDkzNTM2MH0.7UFxZo5pA2pn-7q9gaVX4PthTi1wTfw-EZviU2TrW3w"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"plateNumber\": \"ABC-1265\",\r\n  \"brand\": \"Nissan\",\r\n  \"color\": \"Blue\",\r\n  \"type\": \"Car\",\r\n  \"userId\": 4\r\n}\r\n"
+						},
+						"url": "http://localhost:8080/vehicle-service/api/v1/vehicle/delete/2"
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "parking-service",
+			"item": [
+				{
+					"name": "reservation",
+					"item": [
+						{
+							"name": "New Request",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "New Request",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "parking save",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiVVNFUiIsIm5hbWUiOiJhS0lJIiwidXNlcklkIjo0LCJlbWFpbCI6InVzZXJAZ21haWwuY29tIiwic3ViIjoidXNlckBnbWFpbC5jb20iLCJpYXQiOjE3NTA4NDg5NjAsImV4cCI6MTc1MDkzNTM2MH0.7UFxZo5pA2pn-7q9gaVX4PthTi1wTfw-EZviU2TrW3w"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"location\": \"Lot A - Section 3\",\r\n  \"zone\": \"Zone X\",\r\n  \"userId\": 1,  \r\n  \"isAvailable\": true\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8086/parking-service/api/v1/parkingSpace"
+					},
+					"response": []
+				},
+				{
+					"name": "ping",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiVVNFUiIsIm5hbWUiOiJhS0lJIiwidXNlcklkIjo0LCJlbWFpbCI6InVzZXJAZ21haWwuY29tIiwic3ViIjoidXNlckBnbWFpbC5jb20iLCJpYXQiOjE3NTA4NDg5NjAsImV4cCI6MTc1MDkzNTM2MH0.7UFxZo5pA2pn-7q9gaVX4PthTi1wTfw-EZviU2TrW3w"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"location\": \"Lot A - Section 3\",\r\n  \"zone\": \"Zone X\",\r\n  \"userId\": 1,  \r\n  \"isAvailable\": true\r\n}\r\n"
+						},
+						"url": "http://localhost:8086/parking-service/api/v1/parkingSpace/ping"
+					},
+					"response": []
+				},
+				{
+					"name": "status_available",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiVVNFUiIsIm5hbWUiOiJhS0lJIiwidXNlcklkIjo0LCJlbWFpbCI6InVzZXJAZ21haWwuY29tIiwic3ViIjoidXNlckBnbWFpbC5jb20iLCJpYXQiOjE3NTA4NDg5NjAsImV4cCI6MTc1MDkzNTM2MH0.7UFxZo5pA2pn-7q9gaVX4PthTi1wTfw-EZviU2TrW3w"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"location\": \"Lot A - Section 3\",\r\n  \"zone\": \"Zone X\",\r\n  \"userId\": 1,  \r\n  \"isAvailable\": true\r\n}\r\n"
+						},
+						"url": "http://localhost:8086/parking-service/api/v1/parkingSpace/1/status/available"
+					},
+					"response": []
+				},
+				{
+					"name": "search_id",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "status_unavailable",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiVVNFUiIsIm5hbWUiOiJhS0lJIiwidXNlcklkIjo0LCJlbWFpbCI6InVzZXJAZ21haWwuY29tIiwic3ViIjoidXNlckBnbWFpbC5jb20iLCJpYXQiOjE3NTA4NDg5NjAsImV4cCI6MTc1MDkzNTM2MH0.7UFxZo5pA2pn-7q9gaVX4PthTi1wTfw-EZviU2TrW3w"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"location\": \"Lot A - Section 3\",\r\n  \"zone\": \"Zone X\",\r\n  \"userId\": 1,  \r\n  \"isAvailable\": true\r\n}\r\n"
+						},
+						"url": "http://localhost:8086/parking-service/api/v1/parkingSpace/1/status/unavailable"
+					},
+					"response": []
+				},
+				{
+					"name": "getAll parking",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8086/parking-service/api/v1/parkingSpace"
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
