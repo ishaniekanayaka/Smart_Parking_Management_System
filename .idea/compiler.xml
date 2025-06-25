@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="Api_Geteway" />
+        <module name="configuration_service" />
+        <module name="ServiceRegistry" />
+      </profile>
+      <profile name="Annotation profile for User_Service" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
+        </processorPath>
+        <module name="User_Service" />
+      </profile>
+      <profile name="Annotation profile for payment-service" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
+        </processorPath>
+        <module name="vehicleService" />
+        <module name="paymentService" />
+        <module name="parkingService" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="Parking_Space_Service" target="17" />
+      <module name="UserService" target="17" />
+      <module name="Vehicle_Service" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Api_Geteway" options="-parameters" />
+      <module name="Parking_Space_Service" options="-parameters" />
+      <module name="ServiceRegistry" options="-parameters" />
+      <module name="UserService" options="-parameters" />
+      <module name="User_Service" options="-parameters" />
+      <module name="Vehicle_Service" options="-parameters" />
+      <module name="configuration_service" options="-parameters" />
+      <module name="parkingService" options="-parameters" />
+      <module name="paymentService" options="-parameters" />
+      <module name="vehicleService" options="-parameters" />
+    </option>
+  </component>
+</project>
