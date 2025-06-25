@@ -1,24 +1,17 @@
-package lk.ijse.user_service.dto;
+package lk.ijse.user_service.Response;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 @Builder
-public class UserDTO {
-
-    private Long id;
-
+public class SignUp {
     @NotBlank(message = "Email cannot be blank")
     @Email(message = "Invalid email format")
     private String email;
@@ -39,7 +32,9 @@ public class UserDTO {
     @NotBlank(message = "Role cannot be blank")
     private String role;
 
-    private boolean isActive;
+    /*@NotNull(message = "proPic cannot be null")
+    private String image;*/
 
-    /*private String image;*/
+
+
 }

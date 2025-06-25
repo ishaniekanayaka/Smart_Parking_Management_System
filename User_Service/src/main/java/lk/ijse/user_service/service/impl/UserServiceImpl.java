@@ -1,117 +1,88 @@
 package lk.ijse.user_service.service.impl;
 
+import jakarta.transaction.Transactional;
 import lk.ijse.user_service.dto.UserDTO;
 import lk.ijse.user_service.entity.User;
-import lk.ijse.user_service.exception.UserServiceException;
+
+import lk.ijse.user_service.exception.NotFoundException;
 import lk.ijse.user_service.repository.UserRepo;
 import lk.ijse.user_service.service.UserService;
-import lk.ijse.user_service.util.VarList;
+
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImpl implements UserService, UserDetailsService {
-
-    @Autowired
-    private UserRepo userRepository;
+@Transactional
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private ModelMapper modelMapper;
 
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
-        return new org.springframework.security.core.userdetails.User(
-                user.getEmail(),
-                user.getPassword(),
-                getAuthority(user)
-        );
-    }
-    private Set<SimpleGrantedAuthority> getAuthority(User user) {
-        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-        authorities.add(new SimpleGrantedAuthority(user.getRole()));
-        return authorities;
-    }
+    @Autowired
+    private UserRepo userRepo;
 
     @Override
-    public int saveUser(UserDTO userDTO) {
-        if (userRepository.existsByEmail(userDTO.getEmail())) {
-            return VarList.Not_Acceptable;
-        } else {
-            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-            userDTO.setActive(true);
-            userRepository.save(modelMapper.map(userDTO, User.class));
-            return VarList.Created;
-        }
-    }
+    public boolean userUpdate(Long id, UserDTO userDto) {
 
-    @Override
-    public UserDTO loadUserDetailsByUsername(String email) {
-        Optional<User> user = userRepository.findByEmail(email);
-        return modelMapper.map(user, UserDTO.class);
-    }
+        User user = userRepo.findById(id).orElse(null);
 
-    @Override
-    public List<UserDTO> getAllUsers() {
-        return userRepository.findAll().stream()
-                .filter(User::getActive) // Optional: only active users
-                .map(user -> modelMapper.map(user, UserDTO.class))
-                .collect(Collectors.toList());
-    }
+        if(user != null){
+            user.setEmail(userDto.getEmail());
+            user.setFirstName(userDto.getFirstName());
+            user.setLastName(userDto.getLastName());
+            user.setRole(userDto.getRole());
+            user.setPassword(user.getPassword());
 
-    @Override
-    public boolean deactivateUser(Long userId) {
-        Optional<User> userOpt = userRepository.findById(userId);
-        if (userOpt.isPresent()) {
-            User user = userOpt.get();
-            user.setActive(false);
-            userRepository.save(user);
-            return true;
-        } else {
+            userRepo.save(user);
+            return  true;
+        }else {
             return false;
         }
     }
 
     @Override
-    public int updateUser(UserDTO userDTO) {
-        Optional<User> optionalUser = userRepository.findById(userDTO.getId());
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
+    public boolean userDelete(Long id) {
+        Optional<User> optionalUser = userRepo.findById(id);
 
-            // Update fields
-            user.setFirstName(userDTO.getFirstName());
-            user.setLastName(userDTO.getLastName());
-            user.setPhoneNumber(userDTO.getPhoneNumber());
-            user.setRole(userDTO.getRole());
-            user.setActive(userDTO.isActive());
-
-            // Optional: update password only if changed
-            if (userDTO.getPassword() != null && !userDTO.getPassword().isBlank()) {
-                BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-                user.setPassword(encoder.encode(userDTO.getPassword()));
-            }
-
-            userRepository.save(user);
-            return VarList.Updated;
-        } else {
-            return VarList.Not_Found;
+        if (optionalUser.isPresent()){
+            userRepo.deleteById(id);
+            return true;
+        }else{
+            return false;
         }
     }
 
+    @Override
+    public List<User> getAllUsers() {
+        return modelMapper.map(userRepo.findAll(), new TypeToken<List<UserDTO>>(){}.getType());
+
+    }
+
+    @Override
+    public UserDetailsService userDetailsService() {
+        return username -> {
+            User user = userRepo.findByEmail(username).orElseThrow(
+                    ()-> new NotFoundException("User Name Not Found")
+            );
+
+            return new org.springframework.security.core.userdetails.User(
+                    user.getEmail(),
+                    user.getPassword(),
+                    Collections.singletonList(new SimpleGrantedAuthority(user.getRole()))
+            );
+        };
+    }
 }

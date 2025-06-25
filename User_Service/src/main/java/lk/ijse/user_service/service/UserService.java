@@ -3,21 +3,19 @@ package lk.ijse.user_service.service;
 import lk.ijse.user_service.dto.UserDTO;
 import lk.ijse.user_service.entity.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.List;
 
 public interface UserService {
-    int saveUser(UserDTO userDTO);
+    boolean userUpdate(Long id,UserDTO userDto);
 
-    UserDTO loadUserDetailsByUsername(String email);
+    boolean userDelete(Long id);
 
-    UserDetails loadUserByUsername(String email) throws UsernameNotFoundException;
+    List<User> getAllUsers();
 
-    List<UserDTO> getAllUsers();
-
-    boolean deactivateUser(Long userId);
-
-    int updateUser(UserDTO userDTO);
-
+   /* boolean sendCodeToChangePassword(UserWithKey userWithKey);
+*/
+    UserDetailsService userDetailsService();
 }
