@@ -1,6 +1,7 @@
 package lk.ijse.user_service.controller;
 
 
+import lk.ijse.user_service.dto.RoleUpdateRequestDTO;
 import lk.ijse.user_service.dto.UserDTO;
 import lk.ijse.user_service.entity.User;
 import lk.ijse.user_service.repository.UserRepo;
@@ -19,7 +20,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/user")
-public class userController {
+public class UserController {
 
     @Autowired
     private UserService userService;
@@ -92,7 +93,7 @@ public class userController {
 
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+  /*  @PreAuthorize("hasAnyRole('ADMIN')")*/
     @DeleteMapping("delete/{id}")
     public ResponseEntity<Void> deleteUser (@PathVariable ("id") Long id){
 
@@ -108,7 +109,7 @@ public class userController {
 
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+   /* @PreAuthorize("hasAnyRole('ADMIN')")
     @PutMapping("updateRole/{id}")
     public ResponseEntity<Void> updateRole (@PathVariable ("id") Long  id){
 
@@ -123,7 +124,22 @@ public class userController {
 
         }
         return new ResponseEntity<>(HttpStatus.OK);
-    }
+    }*/
+
+
+   @PutMapping("updateRole/{id}")
+   public ResponseEntity<Void> updateRole(@PathVariable Long id,
+                                          @RequestBody RoleUpdateRequestDTO request) {
+       Optional<User> optionalUser = userRepo.findById(id);
+       if (optionalUser.isPresent()) {
+           User user = optionalUser.get();
+           user.setRole(request.getRole());  // JSON body එකෙන් role එක ගන්නවා
+           userRepo.save(user);
+           return new ResponseEntity<>(HttpStatus.OK);
+       }
+       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+   }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getVehicleById(@PathVariable Long id) {

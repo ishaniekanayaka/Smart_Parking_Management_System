@@ -17,7 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+
 
 import java.util.Optional;
 
@@ -64,7 +64,13 @@ public class LoginController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping(value = "/signUp",consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/signUp", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<JWTAuthResponse> saveUser(@RequestBody SignUp signUp) {
+        return ResponseEntity.ok(authenticationService.Register(signUp));
+    }
+
+
+    /* @PostMapping(value = "/signUp",consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<JWTAuthResponse> saveUser(@RequestPart ("firstName") String firstName,
                                                     @RequestPart("lastName") String lastName,
                                                     @RequestPart("phoneNumber") String phoneNumber,
@@ -85,7 +91,7 @@ public class LoginController {
 
         return ResponseEntity.ok(authenticationService.Register(signUp));
     }
-
+*/
     @PreAuthorize("hasAnyRole('ADMIN')")
     @PutMapping("updateRole/{id}")
     public ResponseEntity<Void> updateRole (@PathVariable ("id") Long  id){
