@@ -20,16 +20,17 @@
         </processorPath>
         <module name="User_Service" />
       </profile>
-      <profile name="Annotation profile for payment-service" enabled="true">
+      <profile name="Annotation profile for vehicle-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
         </processorPath>
+        <module name="parkingService" />
         <module name="vehicleService" />
         <module name="paymentService" />
-        <module name="parkingService" />
+        <module name="parking_service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -48,6 +49,7 @@
       <module name="Vehicle_Service" options="-parameters" />
       <module name="configuration_service" options="-parameters" />
       <module name="parkingService" options="-parameters" />
+      <module name="parking_service" options="-parameters" />
       <module name="paymentService" options="-parameters" />
       <module name="vehicleService" options="-parameters" />
     </option>
