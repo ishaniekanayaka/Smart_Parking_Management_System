@@ -48,9 +48,6 @@ public class User implements UserDetails {
     private Boolean active = true;*/
     private boolean isActive;
 
-/*
-    @Column(columnDefinition = "LONGTEXT")
-    private String image;*/
 
     @PrePersist
     protected void onCreate() {
